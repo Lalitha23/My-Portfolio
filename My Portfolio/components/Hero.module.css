@@ -1,0 +1,140 @@
+.section {
+  padding: 88px 5% 80px;
+  background: #ffffff;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 0.7fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.labelLine {
+  display: block;
+  width: 36px;
+  height: 1.5px;
+  background: var(--light-blue);
+  flex-shrink: 0;
+}
+
+.labelText {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--light-blue);
+}
+
+.name {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2.6rem, 5vw, 3.75rem);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--light-blue);
+  letter-spacing: 0.01em;
+  margin-top: -0.25rem;
+}
+
+.bio {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--body-text);
+  max-width: 500px;
+}
+
+.ctas {
+  display: flex;
+  gap: 0.875rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.5rem;
+  background: var(--navy);
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.15s ease;
+}
+
+.primaryCta:hover {
+  background: #142040;
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.5rem;
+  border: 1.5px solid var(--border-light);
+  color: var(--navy);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.secondaryCta:hover {
+  border-color: var(--light-blue);
+  color: var(--light-blue);
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder {
+  width: 300px;
+  height: 360px;
+  border: 2.5px solid var(--light-blue);
+  border-radius: 10px;
+  background: var(--stats-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.placeholderIcon {
+  display: block;
+}
+
+.placeholderText {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--body-text);
+  opacity: 0.5;
+}

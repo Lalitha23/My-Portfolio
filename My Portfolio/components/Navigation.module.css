@@ -1,0 +1,97 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  height: 68px;
+  gap: 2rem;
+}
+
+.logo {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.links {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.navLink {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+.navLink:hover {
+  color: var(--light-blue);
+  border-bottom-color: var(--light-blue);
+}
+
+.actions {
+  display: flex;
+  gap: 0.625rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.resumeBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.1rem;
+  border: 1.5px solid var(--navy);
+  border-radius: 4px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--navy);
+  background: transparent;
+  letter-spacing: 0.02em;
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+}
+
+.resumeBtn:hover {
+  background: var(--navy);
+  color: #ffffff;
+}
+
+.linkedinBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1.1rem;
+  border: 1.5px solid var(--navy);
+  border-radius: 4px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: var(--navy);
+  letter-spacing: 0.02em;
+  transition: background 0.15s ease;
+  cursor: pointer;
+}
+
+.linkedinBtn:hover {
+  background: #142040;
+  border-color: #142040;
+}
