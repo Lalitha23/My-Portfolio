@@ -11,18 +11,10 @@ export default function Navigation() {
 
         <div className={styles.links}>
           <Link href="/" className={styles.navLink}>Home</Link>
-          <Link href="#projects" className={styles.navLink}>Projects</Link>
+          <Link href="/#projects" className={styles.navLink}>Projects</Link>
         </div>
 
         <div className={styles.actions}>
-          <a
-            href="/resume.pdf"
-            className={styles.resumeBtn}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Resume
-          </a>
           <a
             href="https://www.linkedin.com/in/lalithapammi"
             className={styles.linkedinBtn}

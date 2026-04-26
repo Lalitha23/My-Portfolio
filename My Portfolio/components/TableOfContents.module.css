@@ -1,0 +1,58 @@
+/* Fixed sidebar — only appears on wide viewports where there's margin space */
+.toc {
+  display: none;
+}
+
+@media (min-width: 1380px) {
+  .toc {
+    display: block;
+    position: fixed;
+    top: 108px;
+    /* Just outside the 960px centered content container */
+    left: calc(50% + 492px);
+    width: 154px;
+    z-index: 40;
+  }
+}
+
+.title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--body-text);
+  opacity: 0.55;
+  margin-bottom: 0.75rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.link {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--body-text);
+  opacity: 0.6;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  border-left: 2px solid transparent;
+  transition: color 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.link:hover {
+  opacity: 1;
+  color: var(--navy);
+}
+
+.linkActive {
+  color: var(--navy);
+  opacity: 1;
+  font-weight: 600;
+  border-left-color: var(--light-blue);
+}

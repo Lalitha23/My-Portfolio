@@ -47,3 +47,21 @@
   color: var(--light-blue);
   letter-spacing: 0.02em;
 }
+
+@media (max-width: 540px) {
+  .bar {
+    padding: 2rem 5%;
+  }
+
+  .number {
+    font-size: 2rem;
+  }
+
+  .stat {
+    padding: 0.25rem 0.875rem;
+  }
+
+  .label {
+    font-size: 0.6rem;
+  }
+}

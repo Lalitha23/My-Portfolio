@@ -1,0 +1,154 @@
+/* Robot sits fixed at the bottom of the viewport */
+.robot {
+  position: fixed;
+  bottom: 0;
+  z-index: 50;
+  pointer-events: none;
+  will-change: left;
+  /* Hide on small screens so it doesn't clutter mobile */
+}
+
+@media (max-width: 640px) {
+  .robot {
+    display: none;
+  }
+}
+
+.svg {
+  height: 72px;
+  width: auto;
+  display: block;
+}
+
+/* === Arm pivot points === */
+/* Left arm connects to body at x=6 → transform-origin right edge */
+.leftArm {
+  transform-box: fill-box;
+  transform-origin: right center;
+}
+
+/* Right arm connects to body at x=42 → transform-origin left edge */
+.rightArm {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* Clipboard group pivots from left where arm meets body */
+.clipboardGroup {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* Legs pivot from their top center */
+.leftLeg {
+  transform-box: fill-box;
+  transform-origin: center top;
+  transition: transform 0.08s ease;
+}
+
+.rightLeg {
+  transform-box: fill-box;
+  transform-origin: center top;
+  transition: transform 0.08s ease;
+}
+
+/* ============================
+   STATE: WAVING (page load)
+   ============================ */
+@keyframes leftArmWave {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-55deg); }
+  45% { transform: rotate(-15deg); }
+  70% { transform: rotate(-55deg); }
+}
+
+@keyframes rightArmWave {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(55deg); }
+  55% { transform: rotate(15deg); }
+  80% { transform: rotate(55deg); }
+}
+
+.waving .leftArm {
+  animation: leftArmWave 0.75s ease-in-out infinite;
+}
+
+.waving .rightArm {
+  animation: rightArmWave 0.75s ease-in-out 0.15s infinite;
+}
+
+/* ============================
+   STATE: WALKING (scroll)
+   ============================ */
+
+/* Two-frame waddle: legs alternate each frame */
+.frame0 .leftLeg {
+  transform: translateY(0);
+}
+.frame0 .rightLeg {
+  transform: translateY(-4px);
+}
+.frame1 .leftLeg {
+  transform: translateY(-4px);
+}
+.frame1 .rightLeg {
+  transform: translateY(0);
+}
+
+/* ============================
+   STATE: JUMPING (click)
+   ============================ */
+@keyframes jumpUp {
+  0%   { transform: translateY(0); }
+  25%  { transform: translateY(-26px); }
+  55%  { transform: translateY(-20px); }
+  75%  { transform: translateY(-26px); }
+  100% { transform: translateY(0); }
+}
+
+.jumping {
+  animation: jumpUp 0.75s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+/* Star burst on jump */
+.starBurst {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.star1,
+.star2,
+.star3,
+.star4 {
+  position: absolute;
+  color: #FFD700;
+  animation: starPop 0.65s ease-out forwards;
+}
+
+.star1 { font-size: 14px; top: 0;    left: -22px; animation-delay: 0s; }
+.star2 { font-size: 10px; top: -14px; left: 0;    animation-delay: 0.05s; }
+.star3 { font-size: 14px; top: -4px;  left: 18px; animation-delay: 0.1s; }
+.star4 { font-size: 10px; top: -18px; left: -8px; animation-delay: 0.07s; }
+
+@keyframes starPop {
+  0%   { transform: scale(0) rotate(0deg);   opacity: 1; }
+  60%  { opacity: 1; }
+  100% { transform: scale(1.6) rotate(50deg); opacity: 0; }
+}
+
+/* ============================
+   STATE: CLIPBOARD (decisions)
+   ============================ */
+@keyframes scribble {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  25%       { transform: rotate(6deg)  translateY(-2px); }
+  50%       { transform: rotate(-2deg) translateY(1px); }
+  75%       { transform: rotate(7deg)  translateY(-3px); }
+}
+
+.clipboard .clipboardGroup {
+  animation: scribble 0.45s ease-in-out infinite;
+}

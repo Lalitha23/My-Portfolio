@@ -1,4 +1,5 @@
 import Navigation from '@/components/Navigation';
+import TableOfContents from '@/components/TableOfContents';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './project2.module.css';
@@ -71,6 +72,7 @@ export default function Project2Page() {
   return (
     <>
       <Navigation />
+      <TableOfContents />
       <main className={styles.main}>
 
         {/* 1. Hero */}
@@ -107,7 +109,7 @@ export default function Project2Page() {
         </section>
 
         {/* 2. The Problem */}
-        <section className={styles.section}>
+        <section id="problem" className={styles.section}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
@@ -137,7 +139,7 @@ export default function Project2Page() {
         </section>
 
         {/* 3. What Shipped */}
-        <section className={`${styles.section} ${styles.sectionAlt}`}>
+        <section id="shipped" className={`${styles.section} ${styles.sectionAlt}`}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
@@ -174,7 +176,7 @@ export default function Project2Page() {
         </section>
 
         {/* 4. The Architecture */}
-        <section className={styles.section}>
+        <section id="architecture" className={styles.section}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
@@ -245,7 +247,7 @@ export default function Project2Page() {
         </section>
 
         {/* 5. The Stack */}
-        <section className={`${styles.section} ${styles.sectionAlt}`}>
+        <section id="stack" className={`${styles.section} ${styles.sectionAlt}`}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
@@ -264,7 +266,7 @@ export default function Project2Page() {
         </section>
 
         {/* 6. Decisions I Made */}
-        <section className={styles.section}>
+        <section id="decisions" data-section="decisions" className={styles.section}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
@@ -294,7 +296,7 @@ export default function Project2Page() {
         </section>
 
         {/* 7. Epiphanies */}
-        <section className={`${styles.section} ${styles.sectionAlt}`}>
+        <section id="epiphanies" className={`${styles.section} ${styles.sectionAlt}`}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
@@ -332,7 +334,7 @@ export default function Project2Page() {
         </section>
 
         {/* 8. The Story */}
-        <section className={styles.section}>
+        <section id="story" className={styles.section}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />

@@ -55,26 +55,6 @@
   flex-shrink: 0;
 }
 
-.resumeBtn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.45rem 1.1rem;
-  border: 1.5px solid var(--navy);
-  border-radius: 4px;
-  font-size: 0.83rem;
-  font-weight: 500;
-  color: var(--navy);
-  background: transparent;
-  letter-spacing: 0.02em;
-  transition: background 0.15s ease, color 0.15s ease;
-  cursor: pointer;
-}
-
-.resumeBtn:hover {
-  background: var(--navy);
-  color: #ffffff;
-}
-
 .linkedinBtn {
   display: inline-flex;
   align-items: center;
@@ -89,9 +69,39 @@
   letter-spacing: 0.02em;
   transition: background 0.15s ease;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .linkedinBtn:hover {
   background: #142040;
   border-color: #142040;
+}
+
+/* Mobile: two-row nav */
+@media (max-width: 640px) {
+  .nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.75rem 5%;
+    gap: 0.625rem;
+    align-items: center;
+  }
+
+  .logo {
+    flex: 1;
+    font-size: 1.05rem;
+  }
+
+  .links {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .actions {
+    flex-shrink: 0;
+    order: 2;
+  }
 }

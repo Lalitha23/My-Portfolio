@@ -138,3 +138,36 @@
   color: var(--body-text);
   opacity: 0.5;
 }
+
+/* Tablet: tighten gap, shrink image */
+@media (max-width: 900px) {
+  .inner {
+    gap: 3rem;
+  }
+
+  .placeholder {
+    width: 240px;
+    height: 290px;
+  }
+}
+
+/* Mobile: single column, hide image */
+@media (max-width: 680px) {
+  .section {
+    padding: 56px 5% 56px;
+  }
+
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .imageWrapper {
+    display: none;
+  }
+
+  .bio {
+    font-size: 0.95rem;
+    max-width: 100%;
+  }
+}

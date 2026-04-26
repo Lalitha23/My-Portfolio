@@ -1,4 +1,6 @@
 import { Playfair_Display, Inter } from 'next/font/google';
+import Footer from '@/components/Footer';
+import RobotMascot from '@/components/RobotMascot';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -21,7 +23,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Footer />
+        <RobotMascot />
+      </body>
     </html>
   );
 }

@@ -474,3 +474,81 @@
   letter-spacing: 0.01em;
   opacity: 0.8;
 }
+
+/* ==============================
+   Mobile responsive
+   ============================== */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .section {
+    padding: 60px 0 68px;
+  }
+}
+
+/* Mobile: collapse all two-column grids */
+@media (max-width: 680px) {
+  .hero {
+    padding: 48px 0 56px;
+  }
+
+  .section {
+    padding: 48px 0 56px;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+  }
+
+  .heroTagline {
+    font-size: 0.95rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* What Shipped: single column */
+  .shippedGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* Architecture: single column */
+  .archBlocks {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Stack: single column */
+  .stackGrid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Screenshots: single column */
+  .screenshots {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Decisions: tighten number column */
+  .decisionItem {
+    grid-template-columns: 44px 1fr;
+    gap: 1rem;
+  }
+
+  .decisionNumber {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .decisionItem {
+    grid-template-columns: 1fr;
+  }
+
+  .decisionNumber {
+    display: none;
+  }
+}

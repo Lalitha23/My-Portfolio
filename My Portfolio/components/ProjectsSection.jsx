@@ -85,7 +85,7 @@ function ProjectCard({ project }) {
           {project.comingSoon ? (
             <span className={styles.viewBtnDisabled}>In Development</span>
           ) : (
-            <Link href={project.link} className={styles.viewBtn}>
+            <Link href={project.link} className={styles.viewBtn} data-robot-jump="true">
               View Project
             </Link>
           )}
