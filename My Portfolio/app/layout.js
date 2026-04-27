@@ -1,4 +1,5 @@
 import { Playfair_Display, Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import Footer from '@/components/Footer';
 import RobotMascot from '@/components/RobotMascot';
 import './globals.css';
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
         {children}
         <Footer />
         <RobotMascot />
+        <Analytics />
       </body>
     </html>
   );
