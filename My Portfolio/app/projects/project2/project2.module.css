@@ -523,3 +523,62 @@
     display: none;
   }
 }
+
+/* ==============================
+   Framework / Design Principles Table
+   ============================== */
+
+.frameworkTableWrapper {
+  border: 2px solid #1B2A4A;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(27, 42, 74, 0.1);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.frameworkTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.frameworkTable td {
+  padding: 1rem 1.25rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #4A5568;
+  border-bottom: 1px solid #E2E8F0;
+  vertical-align: top;
+}
+
+.frameworkTable tr:last-child td {
+  border-bottom: none;
+}
+
+.frameworkTable td:first-child {
+  width: 200px;
+  min-width: 140px;
+  border-right: 1px solid #E2E8F0;
+  background: #F7F8FA;
+  color: #1B2A4A;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.frameworkTable td code {
+  font-size: 0.83em;
+  background: #EBF4FF;
+  color: #1B2A4A;
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+}
+
+@media (max-width: 680px) {
+  .frameworkTable td:first-child {
+    white-space: normal;
+    width: 110px;
+    min-width: 90px;
+  }
+}

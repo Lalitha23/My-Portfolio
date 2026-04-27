@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './TableOfContents.module.css';
 
 const SECTIONS = [
+  { id: 'framework', label: 'Framework' },
   { id: 'problem', label: 'The Problem' },
   { id: 'shipped', label: 'What Shipped' },
   { id: 'architecture', label: 'Architecture' },

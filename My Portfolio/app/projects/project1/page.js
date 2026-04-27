@@ -109,7 +109,69 @@ export default function Project1Page() {
           </div>
         </section>
 
-        {/* 2. The Problem */}
+        {/* 2. Agentic Framework */}
+        <section id="framework" className={`${styles.section} ${styles.sectionAlt}`}>
+          <div className={styles.inner}>
+            <div className={styles.sectionLabel}>
+              <span className={styles.labelLine} />
+              <span className={styles.labelText}>Agentic Framework</span>
+            </div>
+            <h2 className={styles.sectionTitle}>How the agent reasons and acts</h2>
+            <div className={styles.frameworkTableWrapper}>
+              <table className={styles.frameworkTable}>
+                <tbody>
+                  <tr>
+                    <td>Tool Use</td>
+                    <td>
+                      6 MCP tools on a single FastMCP server: <code>save_application()</code>,{' '}
+                      <code>list_applications()</code>, <code>archive_application()</code>. 4 preloaded
+                      prompts inside Claude Desktop. Agent 2 integrates Microsoft Graph API (Deleted
+                      Items endpoint only) and the Anthropic Claude API for rejection classification.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Planning</td>
+                    <td>
+                      No dynamic task decomposition. Agent 1 follows a linear prompt-guided flow:
+                      review → rewrite → cover letter → save now. Agent 2 runs on a fixed polling
+                      schedule: detect new deleted email → classify → archive. Both flows are
+                      deterministic and sequential.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Memory</td>
+                    <td>
+                      Filesystem-based. The folder path (<code>Company/Role-JobID/</code>) is the
+                      primary key — no database required. No cross-session memory; each Claude Desktop
+                      session starts fresh. Agent 2 maintains a persistent audit trail in{' '}
+                      <code>deletion_log.csv</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Human-in-the-loop</td>
+                    <td>
+                      Agent 1: explicit &quot;save now&quot; command required before any file action —
+                      nothing happens without the user saying so. Agent 2: email deletion is the human
+                      trigger — the user has already decided; the agent executes after. The agent never
+                      reads the full inbox and never initiates contact.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Evaluation</td>
+                    <td>
+                      Severity-tiered eval harness built for Agent 2. Critical and high failures
+                      (e.g., archiving an offer letter) must be zero before autonomous deployment —
+                      not minimized, zero. Uncertain classifications route to a review queue rather
+                      than acting.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* 3. The Problem */}
         <section id="problem" className={styles.section}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>

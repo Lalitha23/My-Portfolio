@@ -108,7 +108,64 @@ export default function Project2Page() {
           </div>
         </section>
 
-        {/* 2. The Problem */}
+        {/* 2. Design Principles */}
+        <section id="framework" className={`${styles.section} ${styles.sectionAlt}`}>
+          <div className={styles.inner}>
+            <div className={styles.sectionLabel}>
+              <span className={styles.labelLine} />
+              <span className={styles.labelText}>Design Principles</span>
+            </div>
+            <h2 className={styles.sectionTitle}>How the game is built to think and feel</h2>
+            <div className={styles.frameworkTableWrapper}>
+              <table className={styles.frameworkTable}>
+                <tbody>
+                  <tr>
+                    <td>Interaction Model</td>
+                    <td>
+                      Fully client-side — no server, no API calls, no accounts. All game logic runs
+                      in local React state. Every action produces immediate feedback with zero latency.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Constraint-driven build</td>
+                    <td>
+                      Zero external dependencies — pure React only. Every animation, cipher mechanic,
+                      and UI detail is handwritten. This constraint was deliberate: it forces complete
+                      ownership of every component built.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Progressive disclosure</td>
+                    <td>
+                      The vowel clue is demand-triggered, never automatic. Players who want a pure
+                      deduction challenge can ignore it; players who are stuck can use it once. The
+                      mechanic adapts to the player&apos;s chosen difficulty rather than forcing the
+                      player to adapt to the game.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Externalized cognition</td>
+                    <td>
+                      The A–Z scratchpad externalizes letter-elimination reasoning that players would
+                      otherwise track mentally. Keeps the deduction challenge without adding
+                      unnecessary cognitive overhead.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Aesthetic coherence</td>
+                    <td>
+                      The CRT terminal aesthetic — scanlines, phosphor glow, monospace font — is
+                      functional, not decorative. It reinforces the act of cracking a cipher. The
+                      visual layer earns its place by shaping how players experience the puzzle.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* 3. The Problem */}
         <section id="problem" className={styles.section}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
