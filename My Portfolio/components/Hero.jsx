@@ -11,7 +11,7 @@ export default function Hero() {
 
         <h1 className={styles.name}>Lalitha Pammi</h1>
 
-        <p className={styles.title}>Senior Technical Program Manager</p>
+        <p className={styles.title}>AI Builder | TPM | Enterprise SaaS</p>
 
         <div className={styles.bioBlock}>
           <p className={styles.bioParagraph}>
