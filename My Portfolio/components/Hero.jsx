@@ -15,25 +15,20 @@ export default function Hero() {
 
         <div className={styles.bioBlock}>
           <p className={styles.bioParagraph}>
-            I came to product through engineering—and that shapes how I operate. I start with systems,
-            not solutions: where they connect, where they break, and where complexity hides.
+            I came to product through engineering—and that shapes how I operate. I start with
+            systems, not solutions: where they connect, where they break, and where complexity hides.
           </p>
           <p className={styles.bioParagraph}>
-            For a decade, I&apos;ve led product and program work in regulated enterprise SaaS—owning
-            delivery end-to-end, aligning cross-functional stakeholders, and turning ambiguity into
-            executable systems. Staying close to the build is my leverage—with engineers, with
-            customers, and in the decisions that matter.
+            Ten years leading product and program work in regulated enterprise SaaS—owning delivery
+            end-to-end, turning ambiguity into executable systems, staying close to the build.
           </p>
           <p className={styles.bioParagraph}>
-            AI is not a trend to me—it&apos;s force multiplication. It expands how I think, how fast
-            I build, and how far I can push automation.
-          </p>
-          <p className={styles.bioParagraph}>
-            So I don&apos;t just study agents—I build them. Multi-agent workflows. Compliance-driven
-            systems. Applied tools. Even games. Because real understanding comes from building.
+            AI is not a trend to me—it&apos;s force multiplication. I don&apos;t just study
+            agents—I build them. Multi-agent workflows, compliance-driven systems, applied tools,
+            even games.
           </p>
           <p className={`${styles.bioParagraph} ${styles.bioParagraphClosing}`}>
-            This portfolio is a reflection of that mindset. Systems. Built, tested, and shipped.
+            Built, tested, and shipped.
           </p>
         </div>
 

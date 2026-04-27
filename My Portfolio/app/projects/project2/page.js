@@ -121,43 +121,23 @@ export default function Project2Page() {
                 <tbody>
                   <tr>
                     <td>Interaction Model</td>
-                    <td>
-                      Fully client-side — no server, no API calls, no accounts. All game logic runs
-                      in local React state. Every action produces immediate feedback with zero latency.
-                    </td>
+                    <td>Fully client-side. No server, no API calls, no accounts.</td>
                   </tr>
                   <tr>
                     <td>Constraint-driven build</td>
-                    <td>
-                      Zero external dependencies — pure React only. Every animation, cipher mechanic,
-                      and UI detail is handwritten. This constraint was deliberate: it forces complete
-                      ownership of every component built.
-                    </td>
+                    <td>Zero external dependencies. Every animation and mechanic is handwritten in pure React.</td>
                   </tr>
                   <tr>
                     <td>Progressive disclosure</td>
-                    <td>
-                      The vowel clue is demand-triggered, never automatic. Players who want a pure
-                      deduction challenge can ignore it; players who are stuck can use it once. The
-                      mechanic adapts to the player&apos;s chosen difficulty rather than forcing the
-                      player to adapt to the game.
-                    </td>
+                    <td>Vowel clue is demand-triggered, never automatic. Players choose their own difficulty.</td>
                   </tr>
                   <tr>
                     <td>Externalized cognition</td>
-                    <td>
-                      The A–Z scratchpad externalizes letter-elimination reasoning that players would
-                      otherwise track mentally. Keeps the deduction challenge without adding
-                      unnecessary cognitive overhead.
-                    </td>
+                    <td>A–Z scratchpad offloads letter-elimination reasoning without solving the puzzle.</td>
                   </tr>
                   <tr>
                     <td>Aesthetic coherence</td>
-                    <td>
-                      The CRT terminal aesthetic — scanlines, phosphor glow, monospace font — is
-                      functional, not decorative. It reinforces the act of cracking a cipher. The
-                      visual layer earns its place by shaping how players experience the puzzle.
-                    </td>
+                    <td>CRT terminal aesthetic is functional, not decorative — it makes cracking the cipher feel real.</td>
                   </tr>
                 </tbody>
               </table>
