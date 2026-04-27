@@ -30,16 +30,17 @@ const projects = [
   },
   {
     id: 'project3',
-    name: 'Audit Prep Tool',
-    tagline: 'An AI-powered compliance tool that surfaces relevant controls using RAG.',
+    name: 'AuditPrep Agent',
+    tagline: 'A multi-agent system that surfaces the right compliance controls for any audit question — instantly.',
     description:
-      'An intelligent audit preparation assistant that retrieves and surfaces relevant compliance controls from a structured knowledge base. Orchestrated with n8n, vector search via Pinecone, and generation through the Claude API.',
+      'An intelligent audit preparation assistant that retrieves and surfaces relevant compliance controls from a structured knowledge base. Orchestrated with n8n, vector search via Pinecone, and generation through the Claude API. Design complete — development in progress.',
     stack: ['n8n', 'Pinecone', 'Claude API'],
-    methodologies: ['RAG Pipeline', 'Semantic Search', 'Compliance'],
-    link: null,
+    methodologies: ['RAG Pipeline', 'Multi-Agent', 'Semantic Search', 'Compliance'],
+    link: '/projects/project3',
     externalLink: null,
     externalLabel: null,
-    comingSoon: true,
+    comingSoon: false,
+    statusBadge: 'Design Complete · Dev In Progress',
   },
 ];
 
@@ -79,6 +80,9 @@ function ProjectCard({ project }) {
           </span>
           <h3 className={styles.projectName}>{project.name}</h3>
           <p className={styles.projectTagline}>{project.tagline}</p>
+          {project.statusBadge && (
+            <span className={styles.statusBadge}>{project.statusBadge}</span>
+          )}
         </div>
 
         <div className={styles.cardTopRight}>

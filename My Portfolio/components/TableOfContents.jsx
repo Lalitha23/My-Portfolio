@@ -10,6 +10,7 @@ const SECTIONS = [
   { id: 'architecture', label: 'Architecture' },
   { id: 'stack', label: 'The Stack' },
   { id: 'decisions', label: 'Decisions' },
+  { id: 'roadmap', label: 'Roadmap' },
   { id: 'epiphanies', label: 'Epiphanies' },
   { id: 'story', label: 'The Story' },
 ];

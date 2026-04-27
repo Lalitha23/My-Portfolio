@@ -125,6 +125,23 @@
   line-height: 1.5;
 }
 
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  background: rgba(91, 155, 213, 0.1);
+  border: 1px solid #5B9BD5;
+  border-radius: 3px;
+  padding: 0.2rem 0.625rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5B9BD5;
+  width: fit-content;
+}
+
 /* Buttons */
 .viewBtn {
   display: inline-flex;
