@@ -30,6 +30,10 @@ export default function Hero() {
           <p className={`${styles.bioParagraph} ${styles.bioParagraphClosing}`}>
             Built, tested, and shipped.
           </p>
+          <p className={`${styles.bioParagraph} ${styles.bioParagraphClosing}`}>
+            All projects are built using AI-assisted development workflows.
+            The ideas, direction, and decision-making are entirely my own.
+          </p>
         </div>
 
         <div className={styles.ctas}>
