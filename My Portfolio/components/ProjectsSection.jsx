@@ -7,7 +7,7 @@ const projects = [
     name: 'Job Application Lifecycle Agent',
     tagline: 'An MCP server that automates the job application lifecycle inside Claude Desktop.',
     description:
-      'Built an MCP server that lives inside Claude Desktop — automating the full application lifecycle from resume customization to organized file storage to rejection cleanup. Human-in-the-loop by design: nothing happens without explicit user intent. No subscriptions, no third-party uploads, full local control. Note: This is an job application organizing agent and not a resume wirting agent. ',
+      'Built an MCP server that lives inside Claude Desktop — automating the full application lifecycle from resume customization to organized file storage to rejection cleanup. Human-in-the-loop by design: nothing happens without explicit user intent. No subscriptions, no third-party uploads, full local control. Note: This is an job application organizing agent and not just a resume wirting agent. ',
     stack: ['Python', 'FastMCP', 'Claude API', 'Microsoft Graph API', 'MSAL OAuth'],
     methodologies: ['Human-in-the-loop', 'Agentic AI', 'MCP Protocol'],
     link: '/projects/project1',
