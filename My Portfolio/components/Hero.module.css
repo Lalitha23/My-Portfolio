@@ -1,6 +1,16 @@
 .section {
   padding: 88px 5% 80px;
-  background: #ffffff;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(91, 155, 213, 0.07) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .inner {
@@ -9,6 +19,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  position: relative;
 }
 
 .sectionLabel {
@@ -31,13 +42,17 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--light-blue);
+  text-shadow: 0 0 16px rgba(91, 155, 213, 0.5);
 }
 
 .name {
   font-family: var(--font-serif), Georgia, serif;
   font-size: clamp(2.6rem, 5vw, 3.75rem);
   font-weight: 700;
-  color: var(--navy);
+  background: linear-gradient(135deg, #F0F4FF 0%, #5B9BD5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1.05;
   letter-spacing: -0.025em;
 }
@@ -62,12 +77,12 @@
 .bioParagraph {
   font-size: 1rem;
   line-height: 1.8;
-  color: var(--body-text);
+  color: var(--text-secondary);
 }
 
 .bioParagraphClosing {
   font-style: italic;
-  color: var(--navy);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -84,33 +99,36 @@
   padding: 0.65rem 1.5rem;
   background: var(--navy);
   color: #ffffff;
+  border: 1.5px solid var(--light-blue);
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .primaryCta:hover {
   background: #142040;
+  box-shadow: 0 0 20px rgba(91, 155, 213, 0.4);
 }
 
 .secondaryCta {
   display: inline-flex;
   align-items: center;
   padding: 0.65rem 1.5rem;
-  border: 1.5px solid var(--border-light);
-  color: var(--navy);
+  border: 1.5px solid rgba(91, 155, 213, 0.35);
+  color: var(--text-secondary);
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.04em;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .secondaryCta:hover {
   border-color: var(--light-blue);
   color: var(--light-blue);
+  box-shadow: 0 0 14px rgba(91, 155, 213, 0.2);
 }
 
 @media (max-width: 680px) {
