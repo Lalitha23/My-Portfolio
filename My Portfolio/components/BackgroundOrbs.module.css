@@ -3,63 +3,62 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .orb1 {
   position: absolute;
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(27, 42, 74, 0.9) 0%, transparent 70%);
-  filter: blur(80px);
-  top: -200px;
-  left: -150px;
+  background: radial-gradient(circle, rgba(91, 155, 213, 0.22) 0%, transparent 65%);
+  filter: blur(60px);
+  top: -150px;
+  left: -100px;
   animation: orbFloat1 18s ease-in-out infinite;
 }
 
 .orb2 {
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(91, 155, 213, 0.18) 0%, transparent 70%);
-  filter: blur(100px);
-  top: 40%;
-  right: -100px;
+  background: radial-gradient(circle, rgba(91, 155, 213, 0.28) 0%, transparent 65%);
+  filter: blur(80px);
+  top: 35%;
+  right: -120px;
   animation: orbFloat2 22s ease-in-out infinite;
 }
 
 .orb3 {
   position: absolute;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(27, 42, 74, 0.7) 0%, transparent 70%);
-  filter: blur(90px);
-  bottom: -100px;
-  left: 30%;
+  background: radial-gradient(circle, rgba(59, 100, 180, 0.3) 0%, transparent 65%);
+  filter: blur(70px);
+  bottom: -80px;
+  left: 25%;
   animation: orbFloat3 26s ease-in-out infinite;
 }
 
 @keyframes orbFloat1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, -60px) scale(1.1); }
+  50% { transform: translate(50px, -70px) scale(1.12); }
 }
 
 @keyframes orbFloat2 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-30px, 50px) scale(0.95); }
+  50% { transform: translate(-40px, 60px) scale(0.93); }
 }
 
 @keyframes orbFloat3 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(20px, 30px) scale(1.05); }
-  66% { transform: translate(-20px, -20px) scale(0.98); }
+  33% { transform: translate(30px, -40px) scale(1.08); }
+  66% { transform: translate(-25px, 25px) scale(0.96); }
 }
 
 @media (max-width: 640px) {
-  .orb1 { width: 300px; height: 300px; }
-  .orb2 { width: 250px; height: 250px; }
-  .orb3 { width: 200px; height: 200px; }
+  .orb1 { width: 350px; height: 350px; }
+  .orb2 { width: 300px; height: 300px; }
+  .orb3 { width: 250px; height: 250px; }
 }
