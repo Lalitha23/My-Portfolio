@@ -145,6 +145,16 @@ export default function Project3Page() {
               <span className={styles.heroBadgeDot} />
               v1 Shipped · All Acceptance Criteria Passing
             </div>
+            <div className={styles.heroLinks}>
+              <a
+                href="https://audit-prep-agent.streamlit.app/"
+                className={styles.heroLinkPrimary}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Live Demo ↗
+              </a>
+            </div>
           </div>
         </section>
 
