@@ -31,16 +31,16 @@ const projects = [
   {
     id: 'project3',
     name: 'AuditPrep Agent',
-    tagline: 'A multi-agent system that surfaces the right compliance controls for any audit question — instantly.',
+    tagline: 'A two-agent system that processes audit checklists and produces a Covered / Partial / At Risk gap report.',
     description:
-      'An intelligent audit preparation assistant that retrieves and surfaces relevant compliance controls from a structured knowledge base. Orchestrated with n8n, vector search via Pinecone, and generation through the Claude API. Design complete — development in progress.',
-    stack: ['n8n', 'Pinecone', 'Claude API'],
-    methodologies: ['RAG Pipeline', 'Multi-Agent', 'Semantic Search', 'Compliance'],
+      'Built a multi-agent system where an Orchestrator and a Coverage Agent collaborate over a structured JSON message protocol. The Coverage Agent queries a Pinecone vector store for each checklist requirement, applies a confidence-based self-correction loop, and returns a gap report with human review flags. v1 shipped with all acceptance criteria passing.',
+    stack: ['Python', 'Claude API', 'Pinecone', 'OpenAI Embeddings'],
+    methodologies: ['Multi-Agent', 'RAG Pipeline', 'Gap Analysis', 'Compliance'],
     link: '/projects/project3',
     externalLink: null,
     externalLabel: null,
     comingSoon: false,
-    statusBadge: 'Design Complete · Dev In Progress',
+    statusBadge: 'v1 Shipped',
   },
 ];
 
