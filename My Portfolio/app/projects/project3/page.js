@@ -6,105 +6,118 @@ import styles from './project3.module.css';
 export const metadata = {
   title: 'AuditPrep Agent — Lalitha Pammi',
   description:
-    'A multi-agent system that surfaces the right compliance controls for any audit question — instantly.',
+    'A multi-agent system that processes an audit checklist requirement by requirement and produces a Covered / Partial / At Risk gap report.',
 };
 
 const stackItems = [
   {
-    tech: 'n8n',
+    tech: 'Python',
     reason:
-      'Visual workflow orchestration that connects retrieval and synthesis agents without custom glue code. Drag-and-drop debugging makes iteration fast — no need to redeploy just to change the flow.',
+      'All agent logic, tools, and orchestration run in Python. Ecosystem maturity for AI work, direct compatibility with Anthropic and Pinecone SDKs, and the same stack I used in the Job Application Lifecycle Agent — no context switching.',
+  },
+  {
+    tech: 'Claude API (Sonnet)',
+    reason:
+      'Both Orchestrator and Coverage Agent use Claude. Long context window matters for compliance documents. Structured output reliability is critical for the JSON message protocol — agents must parse each other\'s responses without error handling hacks.',
   },
   {
     tech: 'Pinecone',
     reason:
-      'Purpose-built vector database for semantic search. Controls are retrieved by meaning, not keyword — so "password policy" and "authentication requirements" surface the same controls.',
+      'Vector store for policy chunk embeddings. Production-grade managed service that scales to v3 organizational memory (multiple audit cycles) without architectural changes. The same index that powers v1 retrieval becomes the cross-audit memory in v3.',
   },
   {
-    tech: 'Claude API',
+    tech: 'OpenAI text-embedding-3-small',
     reason:
-      'Best-in-class long-context reasoning for the synthesis step. The generation agent reads multiple retrieved controls simultaneously and produces coherent, audit-ready prose with inline citations.',
+      'Significantly cheaper than text-embedding-3-large, performs well for compliance vocabulary, and deliberately decoupled from the Claude reasoning layer. Using OpenAI for embeddings and Claude for reasoning is a common production pattern — each component can be swapped independently.',
   },
   {
-    tech: 'SOC 2 Type II (AICPA TSC)',
+    tech: 'pdfplumber',
     reason:
-      'The initial framework for the knowledge base. Security controls (CC series) are well-scoped and universally understood — the right starting point before adding ISO 27001 or FedRAMP.',
+      'PDF parsing for internal policy documents. Handles tables and structured layouts better than PyPDF2 — important because compliance policies frequently include control matrices and structured evidence tables.',
+  },
+  {
+    tech: 'Streamlit',
+    reason:
+      'Right fit for the prototype: fast to build, supports streaming output for the live agent conversation screen, zero frontend overhead. The live conversation display — showing Orchestrator delegating and Coverage Agent responding in real time — is the demo\'s differentiator.',
   },
 ];
 
 const decisions = [
   {
-    title: 'Multi-agent architecture — not a single large prompt',
+    title: 'Orchestrator cannot query Pinecone — enforced at code level',
     chose:
-      'Separate retrieval and synthesis agents: a dedicated retriever queries Pinecone, a dedicated synthesizer receives only the retrieved controls and generates the response.',
+      'Tool access is strictly scoped: Orchestrator\'s tool list does not include query_pinecone. The Coverage Agent owns all Pinecone access. This is enforced in code, not just in prompts.',
     rejected:
-      'A single prompt that contains the entire control library alongside the question.',
+      'Relying solely on prompt instructions to keep the Orchestrator from querying Pinecone directly.',
     why:
-      'A single-prompt approach does not scale. Control libraries grow to thousands of entries — they cannot all fit in context, and injecting all of them means the model still has to do retrieval internally. Separating retrieval and synthesis means only the relevant controls reach the generation step. Each agent can also be evaluated and improved independently.',
+      'The most common failure mode for multi-agent prototypes is single-agent collapse — the Orchestrator starts querying the vector store directly, the Coverage Agent becomes a passthrough, and the architecture becomes a single agent in disguise. Enforcing tool separation at the code level makes that failure impossible, not just unlikely. If the Orchestrator\'s tool list doesn\'t include the tool, it can\'t call it.',
   },
   {
-    title: 'RAG over fine-tuning',
+    title: 'Confidence flag is mandatory — "Needs Human Review" is a success state',
     chose:
-      'A live RAG pipeline against a Pinecone knowledge base that is updated by re-ingesting the control library whenever policies change.',
+      'Coverage Agent must return a confidence flag on every response. "Needs Human Review" is an explicit output category, not a failure. The prompt celebrates uncertainty as the correct response when evidence is unclear.',
     rejected:
-      'Fine-tuning Claude on a compliance training dataset.',
+      'Letting the Coverage Agent omit confidence when it felt certain, or treating low-confidence responses as errors to suppress.',
     why:
-      'SOC 2 controls change — new AICPA guidance, annual policy updates, organizational scope changes. A fine-tuned model is frozen at training time and goes stale the moment the underlying policies are updated. A RAG system reflects the current knowledge base the moment re-ingestion runs. Compliance is not a static domain.',
+      'In a compliance context, a confident wrong answer is the highest-stakes failure. An agent that says "Covered" when evidence is thin is more dangerous than one that says "I\'m not sure." Making "Needs Human Review" an explicit success state — something the UI displays prominently, not an error to hide — builds trust in the system and keeps the human in the loop where it matters.',
   },
   {
-    title: 'SOC 2 first — not a generic multi-framework tool',
+    title: 'Synthetic data with deliberately seeded coverage gaps',
     chose:
-      'SOC 2 Type II (AICPA Trust Service Criteria) as the v1 framework, with a control metadata schema designed around it.',
+      'Three synthetic policy documents (Access Control, Information Security, Vendor Management) with calibrated coverage: some requirements clearly covered, some clearly missing, some borderline — so the self-correction loop and "Needs Human Review" flag actually trigger during the demo.',
     rejected:
-      'A framework-agnostic design that simultaneously supports SOC 2, ISO 27001, and FedRAMP Moderate from the start.',
+      'Clean synthetic data where everything is covered, or real customer compliance documents.',
     why:
-      'A framework-agnostic schema would require a unified control taxonomy that does not exist yet — every framework structures controls differently. Scoping v1 to SOC 2 lets the retrieval accuracy be validated against a single, well-defined framework before the harder cross-framework mapping problem is introduced in v2.',
+      'A demo that returns "Covered" for every requirement proves nothing — it looks like a keyword search. Real customer data introduces privacy constraints that slow iteration. Seeded gaps let the system demonstrate its actual value: the self-correction loop triggers visibly, confidence-based re-queries run, and the "At Risk" category populates with specific policy language missing. The demo shows the system working, not just running.',
   },
 ];
 
 const roadmap = [
   {
     version: 'v1',
-    label: 'In Design',
-    title: 'Core Pipeline — SOC 2 Retrieval',
+    label: 'Shipped',
+    title: 'Two-Agent Python Core — Gap Analysis End to End',
     items: [
-      'Ingestion agent: SOC 2 Type II controls chunked by policy statement, embedded, and loaded into Pinecone with metadata (criteria code, control category, owner, evidence type)',
-      'Retrieval agent: semantic search returns top-k controls with confidence scores',
-      'Synthesis agent: Claude API generates audit-ready response from retrieved controls, with inline citations',
-      'CLI interface for question input and response output',
+      'Orchestrator Agent: reads SOC 2 checklist, delegates per-requirement to Coverage Agent, evaluates confidence, triggers re-query when low, synthesizes final gap report',
+      'Coverage Agent: queries Pinecone for relevant policy chunks, assesses coverage, returns structured JSON with assessment, confidence, citations, and suggested recheck terms',
+      'Confidence-based self-correction loop: one re-query maximum per requirement; persists "Needs Human Review" if still low',
+      'Append-only decision log: every Orchestrator decision captured with timestamp, rationale, confidence, and whether re-query was triggered',
+      'Gap report with three categories: Covered, Partial, At Risk — with policy citations per requirement',
+      'Streamlit UI: live agent conversation screen (streaming JSON messages) + gap report review screen',
+      'All 6 acceptance criteria validated and passing',
     ],
   },
   {
     version: 'v1.5',
     label: 'Planned',
-    title: 'n8n Orchestration + Web UI',
+    title: 'SharePoint Connector — Evidence Where It Lives',
     items: [
-      'Full retrieval → synthesis workflow in n8n with visual flow editor',
-      'Simple web form for audit question input',
-      'Structured response view with source control references',
-      'Error handling and retry logic in the orchestration layer',
+      'Coverage Agent gains search_sharepoint(query, scope) tool — retrieves documents directly from the company\'s existing SharePoint estate',
+      'Document freshness awareness: last-modified date surfaces with every citation; stale policies flagged automatically',
+      'Setup flow: compliance lead specifies where policies live once — agent navigates from there on every run',
+      'Authentication via Microsoft Graph + MSAL OAuth, read-only scope to specified sites and libraries',
     ],
   },
   {
     version: 'v2',
     label: 'Planned',
-    title: 'Multi-Framework Expansion',
+    title: 'Cross-Functional Coordination — Outreach + Risk Agents',
     items: [
-      'ISO 27001 controls ingested alongside SOC 2 — unified retrieval across frameworks',
-      'FedRAMP Moderate control baseline',
-      'Cross-framework control mapping (SOC 2 CC6 ↔ ISO 27001 A.9)',
-      'Framework selector in the UI — answers scoped to the chosen framework',
+      'Outreach Agent: drafts evidence request emails to cross-functional teams when Coverage Agent flags missing evidence — human approves before send',
+      'Risk Agent: analyses past audit findings as a third document type; surfaces recurring gaps across cycles',
+      'Vector-based episodic memory replacing text-based decision log',
+      'Multi-cycle self-correction with a separate critic agent',
     ],
   },
   {
     version: 'v3',
     label: 'Future',
-    title: 'Evidence Automation + Gap Analysis',
+    title: 'Organizational Memory — Continuous Compliance',
     items: [
-      'Evidence pull from integrated systems: GitHub (change logs), Jira (tickets), AWS Config (infrastructure state)',
-      'Gap analysis report: identifies criteria with no mapped controls or missing evidence',
-      'Automated audit package generation — structured export ready for auditor review',
-      'Scheduled control freshness checks — flags stale controls for review',
+      'Historical Knowledge Base: multiple past audit cycles embedded in Pinecone; agents reason across audits, not just within one',
+      'Pattern detection: surface recurring findings, repeat gaps, remediation history',
+      'Cross-audit insights: "this requirement has been flagged in 3 of the last 4 audits"',
+      'Transforms the system from a per-audit tool into continuous compliance infrastructure',
     ],
   },
 ];
@@ -126,11 +139,11 @@ export default function Project3Page() {
             </div>
             <h1 className={styles.heroTitle}>AuditPrep Agent</h1>
             <p className={styles.heroTagline}>
-              A multi-agent system that surfaces the right compliance controls for any audit question — instantly.
+              A multi-agent system that processes an audit checklist requirement by requirement — producing a Covered / Partial / At Risk gap report with policy citations and a full decision log.
             </p>
             <div className={styles.heroBadge}>
               <span className={styles.heroBadgeDot} />
-              Design Complete · Dev In Progress
+              v1 Shipped · All Acceptance Criteria Passing
             </div>
           </div>
         </section>
@@ -148,23 +161,23 @@ export default function Project3Page() {
                 <tbody>
                   <tr>
                     <td>Tool Use</td>
-                    <td>Claude API (synthesis and reasoning), Pinecone (semantic retrieval), n8n (workflow orchestration). Each agent calls exactly the tool it owns — no shared state.</td>
+                    <td>Orchestrator tools: read_checklist, delegate_to_coverage, evaluate_confidence, request_recheck, log_decision, synthesize_report. Coverage Agent tools: query_pinecone, assess_coverage, report_back. Tool access is scoped at the code level — Orchestrator cannot call query_pinecone.</td>
                   </tr>
                   <tr>
                     <td>Planning</td>
-                    <td>Three-agent linear pipeline: Ingestion → Retrieval → Synthesis. n8n routes between agents and handles retries. No dynamic decomposition in v1.</td>
+                    <td>Orchestrator decomposes the audit checklist into individual requirements and processes each sequentially. After each Coverage Agent response, it evaluates confidence and decides whether to accept, re-query, or flag for human review — before moving to the next requirement.</td>
                   </tr>
                   <tr>
                     <td>Memory</td>
-                    <td>Pinecone vector store — persistent compliance knowledge base, chunked at the policy-statement level with metadata tagging (criteria code, control category, evidence type).</td>
+                    <td>Two memory types: Pinecone vector store (external — policy chunks with metadata, queried per requirement) and an append-only JSON decision log (episodic — every Orchestrator decision with timestamp, rationale, confidence, and re-query trigger). In-context conversation resets between audit runs in v1.</td>
                   </tr>
                   <tr>
                     <td>Human-in-the-loop</td>
-                    <td>Compliance officer reviews and approves synthesized responses before submission to the auditor. The system surfaces; the expert decides.</td>
+                    <td>Gap report is displayed in Streamlit for review before export. Requirements where confidence remains low after one re-query are explicitly flagged as "Needs Human Review" — surfaced prominently, not suppressed. The human decides; the system surfaces.</td>
                   </tr>
                   <tr>
                     <td>Evaluation</td>
-                    <td>Retrieval accuracy (recall@k), hallucination rate against source controls, control-to-criteria mapping precision. Retrieval and synthesis are evaluated independently.</td>
+                    <td>Six acceptance criteria validated: end-to-end flow without manual intervention, multi-agent observability (distinct agents visible in conversation log), self-correction visibly triggers on seeded gaps, decision log complete, gap report accurate against seeded data, demo runs under 3 minutes.</td>
                   </tr>
                 </tbody>
               </table>
@@ -179,64 +192,57 @@ export default function Project3Page() {
               <span className={styles.labelLine} />
               <span className={styles.labelText}>The Problem</span>
             </div>
-            <h2 className={styles.sectionTitle}>What audit prep actually looks like</h2>
+            <h2 className={styles.sectionTitle}>Audit prep is a coordination problem, not a knowledge problem</h2>
             <div className={styles.prose}>
               <p>
-                SOC 2 audits follow a pattern: an auditor asks a question, a compliance officer
-                has to find the right controls, pull the relevant evidence, and present everything
-                in a structured way — under time pressure, often in a live review. The bottleneck
-                is always retrieval. Not judgment. Retrieval.
+                Compliance teams preparing for SOC 2 audits face a coordination nightmare that no existing tool solves end-to-end. The knowledge exists. The controls are documented. The problem is everything else.
               </p>
               <p>
-                Control libraries grow to hundreds of entries across dozens of policy documents.
-                A question about &quot;access management controls&quot; might be covered by five
-                separate policies in three different documents. Only the most experienced compliance
-                officers know their library cold enough to answer without searching. Everyone else
-                opens SharePoint, searches manually, cross-references criteria codes, and pastes
-                the result into a Word document. That process can take hours per question.
+                <strong style={{color: '#F0F4FF'}}>Evidence is scattered.</strong> Internal policies live in SharePoint, past audit findings live in PDFs, the auditor&apos;s checklist arrives as an Excel file. There is no single source of truth, and assembling one from scratch is the first tax of every audit cycle.
               </p>
               <p>
-                The underlying knowledge exists. The controls are documented. The criteria mappings
-                are defined. The problem is that the retrieval step — matching an auditor&apos;s
-                question to the right controls instantly — still requires institutional knowledge
-                that lives in people&apos;s heads, not in a system anyone can query.
+                <strong style={{color: '#F0F4FF'}}>Coverage gaps are invisible until it&apos;s too late.</strong> Teams discover missing evidence during the audit response window — when they have days, not weeks, to find it. The gap analysis that should happen at the start happens under pressure at the end.
               </p>
               <p>
-                AuditPrep Agent is built to compress that retrieval loop from hours to seconds.
-                Not to replace the compliance officer&apos;s judgment — to give them the right
-                controls instantly so their time goes to judgment, not search.
+                <strong style={{color: '#F0F4FF'}}>Past findings aren&apos;t institutional memory.</strong> The same gaps get flagged audit after audit. Previous findings sit in archived folders, not in any workflow that would surface them before the next audit starts.
+              </p>
+              <p>
+                <strong style={{color: '#F0F4FF'}}>Cross-functional asks are manual and slow.</strong> When evidence sits with engineering, HR, or security, the compliance lead drafts individual emails, follows up, escalates. This is the most time-consuming part of audit prep and the least intellectually engaging — exactly the work an agentic system should handle.
+              </p>
+              <p>
+                The result: compliance teams spend most of audit prep on coordination tasks. AuditPrep Agent is designed to take that coordination work off the human and put it on a multi-agent system — while keeping the human in control of high-stakes decisions.
               </p>
             </div>
           </div>
         </section>
 
-        {/* 4. What's Designed */}
+        {/* 4. What Shipped */}
         <section id="shipped" className={`${styles.section} ${styles.sectionAlt}`}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>
               <span className={styles.labelLine} />
-              <span className={styles.labelText}>What&apos;s Designed</span>
+              <span className={styles.labelText}>What Shipped</span>
             </div>
-            <h2 className={styles.sectionTitle}>Architecture decisions made, components specced</h2>
+            <h2 className={styles.sectionTitle}>v1 — working end to end, all criteria passing</h2>
             <div className={styles.shippedGrid}>
               <div className={styles.shippedColumn}>
-                <h3 className={styles.shippedSubhead}>Agent Design</h3>
+                <h3 className={styles.shippedSubhead}>Agent System</h3>
                 <ul className={styles.shippedList}>
-                  <li>Ingestion agent: parses compliance controls, chunks at the policy-statement level, embeds with metadata, loads into Pinecone</li>
-                  <li>Retrieval agent: converts auditor question into an embedding, runs semantic search, returns top-k controls with confidence scores</li>
-                  <li>Synthesis agent: Claude API receives retrieved controls and the original question, generates audit-ready response with inline control citations</li>
-                  <li>Routing agent: n8n workflow connects all three agents, handles error states and retry logic without custom glue code</li>
-                  <li>Evaluation harness: retrieval accuracy tested independently from synthesis accuracy — separate quality bars</li>
+                  <li>Orchestrator Agent: reads SOC 2 checklist, delegates each requirement to Coverage Agent via structured JSON, evaluates confidence, triggers re-query when low, synthesizes final gap report</li>
+                  <li>Coverage Agent: queries Pinecone for relevant policy chunks, assesses coverage, returns structured JSON with assessment, confidence flag, citations, and suggested recheck terms</li>
+                  <li>Confidence-based self-correction: one re-query maximum per requirement with refined search terms; flags as &quot;Needs Human Review&quot; if still low</li>
+                  <li>Append-only decision log: every Orchestrator decision captured — timestamp, requirement, action, response, confidence, re-query trigger</li>
+                  <li>Structured JSON message protocol between agents — parseable, auditable, displayable in UI</li>
                 </ul>
               </div>
               <div className={styles.shippedColumn}>
-                <h3 className={styles.shippedSubhead}>Knowledge Base Design</h3>
+                <h3 className={styles.shippedSubhead}>Output &amp; UI</h3>
                 <ul className={styles.shippedList}>
-                  <li>SOC 2 Type II Trust Service Criteria as the initial framework (CC, A, C, PI, P series)</li>
-                  <li>Chunking strategy: policy-statement level — not page level, not document level — for retrieval precision</li>
-                  <li>Metadata schema per chunk: criteria code, control title, policy owner, evidence type, last review date, associated systems</li>
-                  <li>Gap map: automatically surfaces criteria codes with no mapped controls — audit readiness at a glance</li>
-                  <li>Re-ingestion pipeline: knowledge base updates whenever policies change, no model retraining required</li>
+                  <li>Gap report with three categories: Covered, Partial, At Risk — each requirement shows assessment, policy citations, Coverage Agent reasoning, and any &quot;Needs Human Review&quot; flags</li>
+                  <li>Human-in-the-loop checkpoint: report displayed in Streamlit for review before export</li>
+                  <li>Live agent conversation screen: streaming JSON messages between Orchestrator and Coverage Agent, color-coded by sender, confidence indicators per requirement</li>
+                  <li>Decision log accessible via &quot;View Audit Trail&quot; — the system is not a black box</li>
+                  <li>All 6 acceptance criteria validated and passing as of May 2026</li>
                 </ul>
               </div>
             </div>
@@ -250,57 +256,37 @@ export default function Project3Page() {
               <span className={styles.labelLine} />
               <span className={styles.labelText}>The Architecture</span>
             </div>
-            <h2 className={styles.sectionTitle}>How the pieces connect</h2>
+            <h2 className={styles.sectionTitle}>Three layers, each doing one thing</h2>
             <div className={styles.prose}>
               <p>
-                Five layers, each with a single responsibility. The orchestration layer (n8n) sits
-                between them, routing data and handling failures without any agent needing to know
-                about the others.
+                The system is layered by responsibility. Agents make decisions. RAG provides semantic memory. Infrastructure handles parsing, routing, and logging. The layers communicate through the structured JSON message protocol — no shared state, no implicit coupling.
               </p>
             </div>
 
             <div className={styles.archLayers}>
-              <div className={styles.archLayer}>
+              <div className={`${styles.archLayer} ${styles.archLayerAccent}`}>
                 <div className={styles.archLayerTag}>Layer 1</div>
                 <div className={styles.archLayerContent}>
-                  <h3 className={styles.archLayerTitle}>Input</h3>
-                  <p className={styles.archLayerDesc}>Audit question from the compliance officer or auditor — natural language, no structured format required.</p>
+                  <h3 className={styles.archLayerTitle}>Multi-Agent Layer — Orchestrator + Coverage Agent</h3>
+                  <p className={styles.archLayerDesc}>Decisions, delegation, confidence evaluation, self-correction, synthesis. Orchestrator owns the checklist and the gap report. Coverage Agent owns all Pinecone access. Tool lists enforced at the code level.</p>
                 </div>
               </div>
-              <div className={styles.archLayerConnector}>↓</div>
+              <div className={styles.archLayerConnector}>↓ uses</div>
 
-              <div className={styles.archLayer}>
+              <div className={`${styles.archLayer} ${styles.archLayerAccent}`}>
                 <div className={styles.archLayerTag}>Layer 2</div>
                 <div className={styles.archLayerContent}>
-                  <h3 className={styles.archLayerTitle}>Orchestration — n8n Workflow</h3>
-                  <p className={styles.archLayerDesc}>Parses the question, routes to the retrieval agent, handles retries, passes results to synthesis.</p>
+                  <h3 className={styles.archLayerTitle}>RAG Pipeline — Pinecone + OpenAI Embeddings</h3>
+                  <p className={styles.archLayerDesc}>Policy chunks embedded with OpenAI text-embedding-3-small, stored in Pinecone with metadata (source file, page, document type). Coverage Agent queries by requirement text — semantic match, not keyword. Returns top-k chunks with confidence scores.</p>
                 </div>
               </div>
-              <div className={styles.archLayerConnector}>↓</div>
-
-              <div className={`${styles.archLayer} ${styles.archLayerAccent}`}>
-                <div className={styles.archLayerTag}>Layer 3</div>
-                <div className={styles.archLayerContent}>
-                  <h3 className={styles.archLayerTitle}>Vector Store — Pinecone</h3>
-                  <p className={styles.archLayerDesc}>Semantic search over the compliance control knowledge base. Returns top-k controls with confidence scores and full metadata.</p>
-                </div>
-              </div>
-              <div className={styles.archLayerConnector}>↓</div>
-
-              <div className={`${styles.archLayer} ${styles.archLayerAccent}`}>
-                <div className={styles.archLayerTag}>Layer 4</div>
-                <div className={styles.archLayerContent}>
-                  <h3 className={styles.archLayerTitle}>Generation — Claude API</h3>
-                  <p className={styles.archLayerDesc}>Synthesis agent reads retrieved controls and generates a structured, audit-ready response with inline citations to source control IDs.</p>
-                </div>
-              </div>
-              <div className={styles.archLayerConnector}>↓</div>
+              <div className={styles.archLayerConnector}>↓ runs on</div>
 
               <div className={styles.archLayer}>
-                <div className={styles.archLayerTag}>Layer 5</div>
+                <div className={styles.archLayerTag}>Layer 3</div>
                 <div className={styles.archLayerContent}>
-                  <h3 className={styles.archLayerTitle}>Output</h3>
-                  <p className={styles.archLayerDesc}>Structured response: generated prose + source control citations + criteria codes + evidence pointers. Reviewed and approved by the compliance officer before submission.</p>
+                  <h3 className={styles.archLayerTitle}>Infrastructure — Ingest, Decision Log, UI Bridge</h3>
+                  <p className={styles.archLayerDesc}>pdfplumber parses policy PDFs. Chunking pipeline splits at policy-statement level. Append-only decision log captures every agent action. Streamlit bridges agent output to the live conversation display and gap report UI.</p>
                 </div>
               </div>
             </div>
@@ -309,32 +295,32 @@ export default function Project3Page() {
               <div className={styles.archBlock}>
                 <h3 className={styles.archSubhead}>Ingestion Pipeline</h3>
                 <div className={styles.archFlow}>
-                  <div className={styles.flowStep}>Policy documents loaded as source</div>
+                  <div className={styles.flowStep}>Policy PDFs uploaded via Streamlit UI</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>Chunked at policy-statement level<br /><span className={styles.flowDetail}>not page level — precision over recall at this step</span></div>
+                  <div className={styles.flowStep}>pdfplumber parses — handles tables and structured layouts</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={`${styles.flowStep} ${styles.flowStepAccent}`}>Metadata tagged: criteria code · control category · owner · evidence type</div>
+                  <div className={`${styles.flowStep} ${styles.flowStepAccent}`}>Chunked at policy-statement level<br /><span className={styles.flowDetail}>not page level — one control, one embedding</span></div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>Embedded and upserted into Pinecone</div>
+                  <div className={styles.flowStep}>OpenAI text-embedding-3-small generates embeddings</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>Gap map generated: criteria with no mapped controls flagged</div>
+                  <div className={styles.flowStep}>Upserted into Pinecone with metadata: source, page, document type</div>
                 </div>
               </div>
 
               <div className={styles.archBlock}>
-                <h3 className={styles.archSubhead}>Query Pipeline</h3>
+                <h3 className={styles.archSubhead}>Per-Requirement Query Flow</h3>
                 <div className={styles.archFlow}>
-                  <div className={styles.flowStep}>Auditor question received</div>
+                  <div className={styles.flowStep}>Orchestrator reads next checklist requirement</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>n8n routes to retrieval agent</div>
+                  <div className={`${styles.flowStep} ${styles.flowStepAccent}`}>Delegates via structured JSON → Coverage Agent</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={`${styles.flowStep} ${styles.flowStepAccent}`}>Pinecone: top-k controls returned with confidence scores</div>
+                  <div className={styles.flowStep}>Coverage Agent: query_pinecone → assess → report_back (JSON)</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>Synthesis agent: Claude API generates response from retrieved controls</div>
+                  <div className={styles.flowStep}>Orchestrator checks confidence flag</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>Response reviewed and approved by compliance officer</div>
+                  <div className={`${styles.flowStep} ${styles.flowStepAccent}`}>If low: one re-query with refined terms. If still low: flag &quot;Needs Human Review&quot;</div>
                   <div className={styles.flowArrow}>↓</div>
-                  <div className={styles.flowStep}>Submitted to auditor with source citations</div>
+                  <div className={styles.flowStep}>log_decision → move to next requirement</div>
                 </div>
               </div>
             </div>
@@ -397,7 +383,7 @@ export default function Project3Page() {
               <span className={styles.labelLine} />
               <span className={styles.labelText}>Roadmap</span>
             </div>
-            <h2 className={styles.sectionTitle}>v1 through v3 — what ships and when</h2>
+            <h2 className={styles.sectionTitle}>v1 shipped — v1.5 through v3 designed</h2>
             <div className={styles.roadmap}>
               {roadmap.map((milestone, i) => (
                 <div key={i} className={styles.roadmapMilestone}>
@@ -428,45 +414,22 @@ export default function Project3Page() {
               <span className={styles.labelLine} />
               <span className={styles.labelText}>The Story</span>
             </div>
-            <h2 className={styles.sectionTitle}>From compliance work to compliance tooling</h2>
+            <h2 className={styles.sectionTitle}>From living the problem to building the system</h2>
             <div className={styles.prose}>
               <p>
-                Ten years of enterprise SaaS and government compliance work means I&apos;ve sat in
-                a lot of audit prep meetings. The pattern was always the same: auditor asks a
-                question, compliance officer opens SharePoint, searches for the right policy, finds
-                the section that applies, cross-references the criteria code, pastes the answer into
-                a Word document. That process — for one question — takes anywhere from twenty minutes
-                to a few hours, depending on how well the person knows the library.
+                At Maximus, I owned the Provider Data Management System — the platform that processed Medicaid and Medicare provider enrollments for state agencies. Our environment was audited on combined SOC 1 and SOC 2 scopes, depending on the contract. I sat in enough audit prep cycles to know the pattern cold.
               </p>
               <p>
-                The knowledge wasn&apos;t missing. The controls were documented. The criteria
-                mappings existed. The problem was purely retrieval: getting the right control in
-                front of the right person at the right moment. That&apos;s a solved problem in
-                other domains — any RAG pipeline can do it. The question was whether the same
-                approach worked well enough for compliance, where accuracy is non-negotiable and
-                a wrong citation is worse than no citation.
+                The auditor sends the checklist. The compliance team opens a fresh SharePoint folder. Then the coordination begins: &quot;Can you send me the latest access control policy?&quot; &quot;Where&apos;s the current vendor risk assessment?&quot; &quot;Is this version of the BCP still active?&quot; The evidence existed. It was in SharePoint. It just wasn&apos;t in the right SharePoint folder. Every cycle, the team did the same gather — hunting evidence that was always somewhere accessible, copying it into the audit response folder, hoping they had the latest version.
               </p>
               <p>
-                The architecture came together in phases. The knowledge base design came first,
-                because that was the hardest part: figuring out the right chunking strategy for
-                compliance controls. Chunking at the document level loses precision — an entire
-                policy document gets retrieved when only one paragraph is relevant. Chunking at
-                the sentence level loses context — individual statements don&apos;t carry enough
-                information to be useful without surrounding policy context. Policy-statement level
-                chunking — one control, one embedding — was the answer. Each chunk is independently
-                searchable and independently citable.
+                The hard part was never the analysis. The controls were documented. The criteria mappings existed. The hard part was the coordination tax: knowing where things lived, who owned them, whether what you had was current. A multi-agent system is the right architecture for that problem — not because it&apos;s clever, but because the work literally requires delegation, tracking, and synthesis across multiple sources.
               </p>
               <p>
-                The metadata schema followed from that: criteria code, control category, policy
-                owner, evidence type, last review date, associated systems. Every field serves
-                the synthesis step — the generation agent uses those fields to produce structured
-                output rather than free-form prose that auditors can&apos;t verify.
+                The architecture decisions came from that lived context. The decision log exists because compliance teams need to show their work — auditors want to see the process, not just the answer. The &quot;Needs Human Review&quot; flag is an explicit success state because experienced compliance officers know that some requirements genuinely require judgment calls. The synthetic data has deliberately seeded gaps because a demo that says &quot;Covered&quot; for everything proves nothing.
               </p>
               <p>
-                The current status is design complete. The pipeline architecture is specced,
-                the metadata schema is defined, the agent responsibilities are separated, and
-                the evaluation approach is planned. Development is in progress. The ingestion
-                pipeline runs next.
+                v1 ships the core pattern: two agents, structured communication, confidence-based self-correction, full decision log, gap report. v1.5 solves the problem I actually lived — evidence where it already lives, not evidence you have to upload. The SharePoint connector turns the system from an analysis tool into an agent that operates inside the company&apos;s existing document estate. That&apos;s the shift that makes it real.
               </p>
             </div>
           </div>
