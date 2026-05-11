@@ -154,6 +154,14 @@ export default function Project3Page() {
               >
                 Live Demo ↗
               </a>
+              <a
+                href="https://github.com/Lalitha23/Audit-Prep-Agent"
+                className={styles.heroLinkSecondary}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub ↗
+              </a>
             </div>
           </div>
         </section>

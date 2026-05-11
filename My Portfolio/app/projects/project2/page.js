@@ -97,7 +97,7 @@ export default function Project2Page() {
                 Live Demo ↗
               </a>
               <a
-                href="https://github.com/Lalitha23"
+                href="https://github.com/Lalitha23/Decrypt_Game1"
                 className={styles.heroLinkSecondary}
                 target="_blank"
                 rel="noopener noreferrer"

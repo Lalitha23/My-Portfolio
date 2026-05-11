@@ -11,8 +11,8 @@ const projects = [
     stack: ['Python', 'FastMCP', 'Claude API', 'Microsoft Graph API', 'MSAL OAuth'],
     methodologies: ['Human-in-the-loop', 'Agentic AI', 'MCP Protocol'],
     link: '/projects/project1',
-    externalLink: 'https://github.com/Lalitha23/job-application-agent-',
-    externalLabel: 'GitHub',
+    githubLink: 'https://github.com/Lalitha23/job-application-agent-',
+    liveLink: null,
     comingSoon: false,
   },
   {
@@ -24,8 +24,8 @@ const projects = [
     stack: ['React', 'JSX', 'Vercel'],
     methodologies: ['Game Design', 'Progressive Disclosure', 'Responsive UI'],
     link: '/projects/project2',
-    externalLink: 'https://decrypt-game-nine.vercel.app',
-    externalLabel: 'Live Demo',
+    githubLink: 'https://github.com/Lalitha23/Decrypt_Game1',
+    liveLink: 'https://decrypt-game-nine.vercel.app',
     comingSoon: false,
   },
   {
@@ -37,8 +37,8 @@ const projects = [
     stack: ['Python', 'Claude API', 'Pinecone', 'OpenAI Embeddings'],
     methodologies: ['Multi-Agent', 'RAG Pipeline', 'Gap Analysis', 'Compliance'],
     link: '/projects/project3',
-    externalLink: 'https://audit-prep-agent.streamlit.app/',
-    externalLabel: 'Live Demo',
+    githubLink: 'https://github.com/Lalitha23/Audit-Prep-Agent',
+    liveLink: 'https://audit-prep-agent.streamlit.app/',
     comingSoon: false,
     statusBadge: 'v1 Shipped',
   },
@@ -93,14 +93,24 @@ function ProjectCard({ project }) {
               View Project
             </Link>
           )}
-          {project.externalLink && (
+          {project.githubLink && (
             <a
-              href={project.externalLink}
+              href={project.githubLink}
               className={styles.externalLink}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {project.externalLabel} ↗
+              GitHub ↗
+            </a>
+          )}
+          {project.liveLink && (
+            <a
+              href={project.liveLink}
+              className={styles.externalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Live Demo ↗
             </a>
           )}
         </div>
