@@ -7,14 +7,14 @@ const stats = [
     sub: 'Enterprise & Gov SaaS',
   },
   {
-    number: '2',
+    number: '3',
     label: 'Projects Shipped',
     sub: 'Live & in production',
   },
   {
-    number: '3',
+    number: '6',
     label: 'AI Tools',
-    sub: 'MCP · RAG · Claude API',
+    sub: 'Claude · OpenAI · Pinecone · MCP',
   },
 ];
 
