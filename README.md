@@ -20,7 +20,7 @@ This site is a builder's narrative. Each project page tells the full story: what
 |---|---|---|---|
 | Job Application Lifecycle Agent | MCP server inside Claude Desktop that automates the job application lifecycle responsibly | Python, MCP, Claude API | Live |
 | Decrypt | Browser-based Caesar cipher word puzzle game | React | Live |
-| Audit Prep Tool | AI-assisted compliance audit preparation | n8n, Pinecone, Claude API | Coming soon |
+| Audit Prep Tool | AI-assisted compliance audit preparation | n8n, Pinecone, Claude API | Live |
 
 ---
 
